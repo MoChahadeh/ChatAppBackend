@@ -1,4 +1,5 @@
-import { Jwt } from "jsonwebtoken";
+import jwt from 'jsonwebtoken';
+
 
 export default function authMidWare(req, res, next) {
 
@@ -9,8 +10,8 @@ export default function authMidWare(req, res, next) {
     }
 
     try {
-        const decoded = Jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded.user;
+        const decoded = jwt.verify(token, process.env.JWT_KEY);
+        req.user = decoded._id;
         next();
     } catch (err) {
         res.status(401).json({ msg: "Token is not valid" });

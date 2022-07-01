@@ -1,9 +1,19 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import cors from 'cors';
+
+import userRoute from "./routes/user.js";
+import authRoute from "./routes/auth.js";
 
 const app = express();
 
 app.use(express.json());
+app.use(cors({
+    exposedHeaders: "x-auth-token",
+}));
+
+app.use("/api/auth", authRoute);
+app.use("/api/users", userRoute);
 
 app.get("/", (req,res) => {
 
@@ -30,7 +40,7 @@ async function launch() {
 
     }
 
-    return app.listen(process.env.PORT || 3001, ()=> console.log("Listening on port " + process.env.PORT));
+    return app.listen(3011, ()=> console.log("Listening on port " + process.env.PORT));
 
 }
 
