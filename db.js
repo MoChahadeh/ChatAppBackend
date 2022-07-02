@@ -51,6 +51,7 @@ userSchema.methods.generateAuthToken = function () {
 
     return jwt.sign({
         _id: this._id,
+        email: this.email,
         isAdmin: this.isAdmin,
         dateCreated: Date.now(),
     }, process.env.JWT_KEY);
