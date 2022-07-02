@@ -4,6 +4,8 @@ import cors from 'cors';
 
 import userRoute from "./routes/user.js";
 import authRoute from "./routes/auth.js";
+import fetchRoute from "./routes/fetch.js";
+import sendRoute from "./routes/send.js";
 
 const app = express();
 
@@ -14,6 +16,8 @@ app.use(cors({
 
 app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
+app.use("/api/fetch", fetchRoute);
+app.use("/api/send", sendRoute);
 
 app.get("/", (req,res) => {
 
