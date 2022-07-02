@@ -9,8 +9,6 @@ const router = express.Router();
 
 router.post("/", async (req,res) => {
 
-    console.log("Auth called.");
-
     if(!req.body.email || !req.body.password) return res.status(400).send("Email and password are required");
     if(!validateEmail(req.body.email)) return res.status(400).send("Enter a valid email");
 

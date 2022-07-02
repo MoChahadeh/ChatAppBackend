@@ -10,7 +10,7 @@ const router = express.Router();
 router.get("/me", authMidWare, async (req, res) => {
 
     try {
-        const user = await User.findOne({_id: req.user}).select(["-password", "-_id"]);
+        const user = await User.findOne({_id: req.user._id}).select(["-password", "-_id"]);
         if(!user) throw new Error("User not found");
         res.status(200).send(user);
     } catch(err) {
@@ -43,6 +43,22 @@ router.post("/signup", async (req, res) => {
     } catch(err) {
         res.status(400).send(err.message);
     }
+
+})
+
+router.get("/search", authMidWare, async (req, res) => {
+
+    let users;
+
+    if(req.query.email){
+        users = await User.find({email: {$not: req.user.email}}).select(["_id","email", "name"]);
+    } else {
+        users = await User.find().select(["_id","email", "name"]);
+    }
+    
+    if(!users) return res.status(404).send("No users found");
+    res.status(200).send([]);
+
 
 })
 
