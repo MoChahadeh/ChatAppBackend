@@ -11,11 +11,11 @@ router.post("/", authMidWare, async (req, res) => {
 
     if(!from) return res.status(400).send("invalid sender");
 
-    const to = await User.findOne({email: req.body.email});
+    const to = await User.findById(req.body.to);
 
     if(!to) return res.status(404).send("Contact not found");
 
-    let convo = Conversation.findOne({users: [from._id, to._id]});
+    let convo = await Conversation.findOne({users: {$all: [from._id, to._id]}});
 
     if(!convo) {
 
@@ -25,7 +25,7 @@ router.post("/", authMidWare, async (req, res) => {
 
             await convo.save();
     
-            return res.status(200).send()
+            return res.status(200).send(await convo.populate("users"));
     
         } catch(err) {
 
@@ -35,12 +35,12 @@ router.post("/", authMidWare, async (req, res) => {
     } else {
 
         try{
-
+            console.log(convo);
             convo.messages.push({sender: from._id, message: req.body.message});
 
             await convo.save();
 
-            return res.status(200).send(convo);
+            return res.status(200).send(await convo.populate("users"));
 
         } catch(err) {
 

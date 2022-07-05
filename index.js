@@ -21,7 +21,7 @@ app.use("/api/send", sendRoute);
 
 app.get("/", (req,res) => {
 
-    res.send("NIGGAAA");
+    res.send("Mohamad Chahadeh's ChatApp API!");
 
 })
 
