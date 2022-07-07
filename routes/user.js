@@ -54,14 +54,19 @@ router.get("/search", authMidWare, async (req, res) => {
     let users;
 
     if(req.query.email){
-        users = await User.find({email: new RegExp(`/.*${req.query.email}*./`)}).select(["_id","email", "name"]);
+        users = await User.find(
+            {$and: [
+                {email: new RegExp(`/${req.body.email}/`)},
+                {email: {$not: {$eq: req.body.email}}}
+            ]}
+        ).select(["_id","email", "name"]);
     } else {
         users = await User.find().select(["_id","email", "name"]);
     }
     
     if(!users) return res.status(404).send("No users found");
-    res.status(200).send(users);
 
+    res.status(200).send(users.filter(obj => obj.email != req.user.email));
 
 })
 
