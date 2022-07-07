@@ -52,7 +52,7 @@ userSchema.methods.generateAuthToken = function () {
 			_id: this._id,
 			email: this.email,
 			isAdmin: this.isAdmin,
-			dateCreated: Date.now(),
+			dateCreated: new Date(),
 		},
 		process.env.JWT_KEY
 	);
@@ -74,7 +74,7 @@ const Conversation = mongoose.model(
         ref: "User",
       },
       message: {type:String, required: true},
-      date: Date,
+      date: {type: Date, default: date.now},
     }],
 	})
 );
