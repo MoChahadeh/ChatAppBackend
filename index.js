@@ -1,6 +1,9 @@
 import express from 'express';
 import mongoose from 'mongoose';
+
 import cors from 'cors';
+import helmet from 'helmet';
+import compression from 'compression';
 
 import userRoute from "./routes/user.js";
 import authRoute from "./routes/auth.js";
@@ -13,6 +16,9 @@ app.use(express.json());
 app.use(cors({
     exposedHeaders: "x-auth-token",
 }));
+
+app.use(helmet());
+app.use(compression());
 
 app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
@@ -44,7 +50,7 @@ async function launch() {
 
     }
 
-    return app.listen(3011, ()=> console.log("Listening on port " + process.env.PORT));
+    return app.listen(process.env.PORT, ()=> console.log("Listening on port " + process.env.PORT));
 
 }
 
