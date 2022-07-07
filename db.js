@@ -74,7 +74,7 @@ const Conversation = mongoose.model(
         ref: "User",
       },
       message: {type:String, required: true},
-      date: {type: Date, default: date.now},
+      date: {type: Date, default: Date.now},
     }],
 	})
 );
