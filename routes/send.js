@@ -35,7 +35,6 @@ router.post("/", authMidWare, async (req, res) => {
     } else {
 
         try{
-            console.log(convo);
             convo.messages.push({sender: from._id, message: req.body.message});
 
             await convo.save();
