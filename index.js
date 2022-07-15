@@ -35,6 +35,7 @@ app.get("/", (req,res) => {
 async function launch() {
 
     if(!process.env.MONGODB_URI) return console.error("No Mongodb url provided");
+    if(!process.env.PORT) return console.error("No port provided");
 
     console.log("Connecting...");
     try {
