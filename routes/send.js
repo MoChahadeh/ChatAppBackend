@@ -19,7 +19,9 @@ router.post("/", authMidWare, async (req, res) => {
 
     if(!convo) {
 
-        convo = new Conversation({users: [from._id, to._id], messages: [{sender: from._id, message: req.body.message}]});
+        convo = new Conversation({users: [from._id, to._id], messages: []});
+
+        convo.messages.push({sender: from._id, message: req.body.message});
 
         try {
 
