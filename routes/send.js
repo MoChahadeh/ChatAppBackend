@@ -1,6 +1,7 @@
 import express from 'express';
 import { User, Conversation } from '../db.js';
 import authMidWare from '../middleware/auth.js';
+import EmailSender from '../emailsender.js'
 
 const router = express.Router();
 
@@ -17,6 +18,7 @@ router.post("/", authMidWare, async (req, res) => {
 
     let convo = await Conversation.findOne({users: {$all: [from._id, to._id]}});
 
+
     if(!convo) {
 
         convo = new Conversation({users: [from._id, to._id], messages: []});
@@ -26,6 +28,8 @@ router.post("/", authMidWare, async (req, res) => {
         try {
 
             await convo.save();
+
+            EmailSender.sendMessage(from, to, req.body.message);
     
             return res.status(200).send(await convo.populate("users"));
     
@@ -40,6 +44,8 @@ router.post("/", authMidWare, async (req, res) => {
             convo.messages.push({sender: from._id, message: req.body.message});
 
             await convo.save();
+
+            EmailSender.sendMessage(from, to, req.body.message);
 
             return res.status(200).send(await convo.populate("users"));
 
