@@ -3,6 +3,7 @@ import Joi from 'joi';
 import bcrypt from 'bcrypt';
 import {User} from "../db.js";
 import {validateEmail} from "../validators.js";
+import emailSender from "../emailsender.js";
 
 
 const router = express.Router();
@@ -19,6 +20,15 @@ router.post("/", async (req,res) => {
     const validPass = await bcrypt.compare(req.body.password, user.password);
 
     if(!validPass) return res.status(400).send("Invalid email or password");
+
+    if(!user.verified) {
+
+        const verificationToken = user.generateVerificationToken();
+
+        await emailSender.sendVerification(user.email, verificationToken);
+
+        return res.status(400).send("please verify your email..");
+    }
 
     const token = user.generateAuthToken();
 

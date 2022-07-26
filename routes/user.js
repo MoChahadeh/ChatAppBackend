@@ -4,6 +4,7 @@ import bcrypt from 'bcrypt';
 import authMidWare from '../middleware/auth.js';
 import {User, Conversation} from "../db.js";
 import {validateEmail ,validatePass} from "../validators.js";
+import emailSender from "../emailsender.js";
 
 const router = express.Router();
 
@@ -38,11 +39,17 @@ router.post("/signup", async (req, res) => {
         email: req.body.email,
         password: hash,
         isAdmin: false,
+        verified: false
     });
 
     try {
         await newUser.save();
-        res.status(200).send({token: newUser.generateAuthToken()});
+
+        const verificationToken = newUser.generateVerificationToken();
+
+        await emailSender.sendVerification(newUser.email, verificationToken);
+
+        res.status(200).send("Verification Email was sent, please verify your email then log in");
     } catch(err) {
         res.status(400).send(err.message);
     }
@@ -56,7 +63,7 @@ router.get("/search", authMidWare, async (req, res) => {
     if(req.query.email){
         users = await User.find(
             {$and: [
-                {email: new RegExp(`/${req.body.email}/`)},
+                {email: new RegExp(req.body.email, "i")},
                 {email: {$not: {$eq: req.body.email}}}
             ]}
         ).select(["_id","email", "name"]);

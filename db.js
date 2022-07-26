@@ -44,6 +44,10 @@ const userSchema = new mongoose.Schema({
 		type: Boolean,
 		default: false,
 	},
+	verified: {
+		type: Boolean,
+		default: false,
+	}
 });
 
 userSchema.methods.generateAuthToken = function () {
@@ -57,6 +61,17 @@ userSchema.methods.generateAuthToken = function () {
 		process.env.JWT_KEY
 	);
 };
+
+userSchema.methods.generateVerificationToken = function () {
+	return jwt.sign(
+		{
+			_id: this._id,
+			dateCreated: new Date(),
+		},
+		process.env.JWT_KEY,
+		{ expiresIn: "1h" }
+	);
+}
 
 const User = mongoose.model("User", userSchema);
 

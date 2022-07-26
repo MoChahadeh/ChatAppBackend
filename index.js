@@ -9,6 +9,7 @@ import userRoute from "./routes/user.js";
 import authRoute from "./routes/auth.js";
 import fetchRoute from "./routes/fetch.js";
 import sendRoute from "./routes/send.js";
+import verifyRoute from "./routes/verify.js";
 
 const app = express();
 
@@ -24,6 +25,8 @@ app.use("/api/auth", authRoute);
 app.use("/api/users", userRoute);
 app.use("/api/fetch", fetchRoute);
 app.use("/api/send", sendRoute);
+app.use("/api/verify", verifyRoute);
+
 
 app.get("/", (req,res) => {
 
@@ -36,6 +39,7 @@ async function launch() {
 
     if(!process.env.MONGODB_URI) return console.error("No Mongodb url provided");
     if(!process.env.PORT) return console.error("No port provided");
+    if(!process.env.JWT_KEY) return console.error("No JWT key provided");
 
     console.log("Connecting...");
     try {
