@@ -8,9 +8,13 @@ router.get("/:token", async (req, res) => {
 
     if(!req.params.token) return res.status(400).send("No token was passed");
 
-    const tokenObj = jwt.verify(req.params.token, process.env.JWT_KEY);
+    let tokenObj;
 
-    if(!tokenObj) return res.status(400).send("Invalid token");
+    try{
+        tokenObj = jwt.verify(req.params.token, process.env.JWT_KEY);
+    } catch {
+        return res.status(400).send("Invalid token");
+    }
 
     const user = await User.findById(tokenObj._id);
 
