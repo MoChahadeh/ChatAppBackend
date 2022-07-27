@@ -60,11 +60,12 @@ router.get("/search", authMidWare, async (req, res) => {
 
     let users;
 
-    if(req.query.email){
+    if(req.query.email && req.query.email.length > 0) {
         users = await User.find(
             {$and: [
-                {email: new RegExp(req.body.email, "i")},
-                {email: {$not: {$eq: req.body.email}}}
+                {email: {$regex: req.query.email, $options: "i"}},
+                {email: {$not: {$eq: req.body.email}}},
+                {activated: true}
             ]}
         ).select(["_id","email", "name"]);
     } else {
