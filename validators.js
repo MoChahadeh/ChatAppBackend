@@ -3,7 +3,7 @@ import Joi from "joi";
 function validateEmail(email) {
 
     const schema = Joi.object({
-        email: Joi.string().min(8).max(255).required().email(),
+        email: Joi.string().email().min(8).max(255).required(),
     });
 
     return schema.validate({email})

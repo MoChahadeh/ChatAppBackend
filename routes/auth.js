@@ -9,9 +9,8 @@ import emailSender from "../emailsender.js";
 const router = express.Router();
 
 router.post("/", async (req,res) => {
-
     if(!req.body.email || !req.body.password) return res.status(400).send("Email and password are required");
-    if(!validateEmail(req.body.email)) return res.status(400).send("Enter a valid email");
+    if(validateEmail(req.body.email).error) return res.status(400).send("Enter a valid email");
 
     const user = await User.findOne({email: req.body.email});
 
