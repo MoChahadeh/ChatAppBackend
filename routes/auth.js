@@ -31,7 +31,9 @@ router.post("/", async (req,res) => {
 
     const token = user.generateAuthToken();
 
-    return res.status(200).send({token});
+    user.convos = await user.getConvos();
+
+    return res.status(200).send({token, user});
 
 })
 
