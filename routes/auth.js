@@ -31,9 +31,13 @@ router.post("/", async (req,res) => {
 
     const token = user.generateAuthToken();
 
-    user.convos = await user.getConvos();
+    const convos = await user.getConvos();
 
-    return res.status(200).send({token, user});
+    const user_obj = {
+        ...user._doc, convos
+    }
+
+    return res.status(200).send({token, user: user_obj});
 
 })
 
