@@ -11,6 +11,9 @@ import fetchRoute from "./routes/fetch.js";
 import sendRoute from "./routes/send.js";
 import verifyRoute from "./routes/verify.js";
 
+import 'dotenv/config'
+
+
 const app = express();
 
 app.use(express.json());
