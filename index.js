@@ -37,9 +37,10 @@ app.get("/", (req,res) => {
 
 async function launch() {
 
-    if(!process.env.MONGODB_URI) return console.error("No Mongodb url provided");
-    if(!process.env.PORT) return console.error("No port provided");
-    if(!process.env.JWT_KEY) return console.error("No JWT key provided");
+    if(!process.env.MONGODB_URI) return console.error("ERROR No Mongodb url provided");
+    if(!process.env.PORT) return console.error("ERROR No port provided");
+    if(!process.env.JWT_KEY) return console.error("ERROR No JWT key provided");
+    if(!process.env.EMAIL || !process.env.PASSWORD) return console.error("ERROR: Missing messaging email credentials");
 
     console.log("Connecting...");
     try {
