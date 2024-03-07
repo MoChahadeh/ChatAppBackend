@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-
+import { User } from '../db';
 
 export default async function authMidWare(req, res, next) {
 
