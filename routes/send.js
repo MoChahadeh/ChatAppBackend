@@ -29,9 +29,9 @@ router.post("/", authMidWare, async (req, res) => {
 
             await convo.save();
 
-            EmailSender.sendMessage(from, to, req.body.message);
+            // EmailSender.sendMessage(from, to, req.body.message);
     
-            return res.status(200).send(await convo.populate("users"));
+            return res.status(200).send(await convo.populate("users", ["name","email"]));
     
         } catch(err) {
 
@@ -45,9 +45,9 @@ router.post("/", authMidWare, async (req, res) => {
 
             await convo.save();
 
-            EmailSender.sendMessage(from, to, req.body.message);
+            // EmailSender.sendMessage(from, to, req.body.message);
 
-            return res.status(200).send(await convo.populate("users"));
+            return res.status(200).send(await convo.populate("users", ["name", "email"]));
 
         } catch(err) {
 

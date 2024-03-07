@@ -14,9 +14,9 @@ router.get("/me", authMidWare, async (req, res) => {
         const user = await User.findOne({_id: req.user._id}).select(["-password"]);
         if(!user) throw new Error("User not found");
 
-        const userConvos = await Conversation.find({users: req.user._id}).populate("users");
+        const convos = await user.getConvos();
 
-        res.status(200).send({user, userConvos});
+        res.status(200).send({...user._doc, convos});
     } catch(err) {
         console.log(err);
         res.status(400).send(err);
