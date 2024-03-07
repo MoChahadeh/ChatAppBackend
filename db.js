@@ -74,7 +74,7 @@ userSchema.methods.generateVerificationToken = function () {
 }
 
 userSchema.methods.getConvos = async function () {
-	const convos = await Conversation.find({ users: this._id });
+	const convos = await Conversation.find({ users: this._id }).populate("users", ["name", "email"]);
 	return convos;
 }
 
