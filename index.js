@@ -1,44 +1,9 @@
-import express from 'express';
-import mongoose from 'mongoose';
-
-import cors from 'cors';
-import helmet from 'helmet';
-import compression from 'compression';
-
-import userRoute from "./routes/user.js";
-import authRoute from "./routes/auth.js";
-import fetchRoute from "./routes/fetch.js";
-import sendRoute from "./routes/send.js";
-import verifyRoute from "./routes/verify.js";
-
 import 'dotenv/config'
 
+import mongoose from 'mongoose';
+import app from "./server.js"
 
-const app = express();
-
-app.use(express.json());
-app.use(cors({
-    origin: true,
-    credentials: true,
-    exposedHeaders: "x-auth-token",
-}));
-
-app.use(helmet());
-app.use(compression());
-
-app.use("/api/auth", authRoute);
-app.use("/api/users", userRoute);
-app.use("/api/fetch", fetchRoute);
-app.use("/api/send", sendRoute);
-app.use("/api/verify", verifyRoute);
-
-
-app.get("/", (req,res) => {
-
-    res.send("Mohamad Chahadeh's ChatApp API!");
-
-})
-
+import {init_socket} from './socket.js';
 
 async function launch() {
 
@@ -61,7 +26,13 @@ async function launch() {
 
     }
 
-    return app.listen(process.env.PORT, ()=> console.log("Listening on port " + process.env.PORT));
+    const server = app.listen(process.env.PORT, () => {
+        console.log(`Server running on port ${process.env.PORT}`);
+    });
+
+    init_socket(server);
+    
+    return server;
 
 }
 
