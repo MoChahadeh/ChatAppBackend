@@ -14,7 +14,8 @@ async function launch() {
 
     console.log("Connecting...");
     try {
-
+        
+        mongoose.set('strictQuery', true);
         const connection = await mongoose.connect(process.env.MONGODB_URI, {socketTimeoutMS: 1000});
 
         console.log("Connected to MongoDB");

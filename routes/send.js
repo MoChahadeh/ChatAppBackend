@@ -2,6 +2,7 @@ import express from 'express';
 import { User, Conversation } from '../db.js';
 import authMidWare from '../middleware/auth.js';
 import EmailSender from '../emailsender.js'
+import { connectedUsers } from '../socket.js';
 
 const router = express.Router();
 
@@ -30,6 +31,10 @@ router.post("/", authMidWare, async (req, res) => {
             await convo.save();
 
             // EmailSender.sendMessage(from, to, req.body.message);
+
+            if(connectedUsers[to._id]) {
+                connectedUsers[to._id].emit("newMessage", await convo.populate("users", "name email"));
+            }
     
             return res.status(200).send(await convo.populate("users", ["name","email"]));
     
@@ -47,7 +52,12 @@ router.post("/", authMidWare, async (req, res) => {
 
             // EmailSender.sendMessage(from, to, req.body.message);
 
-            return res.status(200).send(await convo.populate("users", ["name", "email"]));
+            if(connectedUsers[to._id]) {
+                connectedUsers[to._id].emit("newMessage", await convo.populate("users", "name email"));
+            }
+    
+
+            return res.status(200).send(await convo.populate("users", "name email"));
 
         } catch(err) {
 

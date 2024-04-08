@@ -1,7 +1,7 @@
 import {Server as SocketServer} from 'socket.io';
 import socketAuthMidware from './middleware/authSocket.js';
 
-export const connected_Users = {};
+export const connectedUsers = {};
 export const init_socket = (server) => {
 
     const io = new SocketServer(server, {
@@ -16,13 +16,13 @@ export const init_socket = (server) => {
     io.on('connection', (socket) => {
         console.log(`User '${socket.user.name}' Connected.`);
 
-        connected_Users[socket.user._id] = socket;
+        connectedUsers[socket.user._id] = socket;
 
         socket.on("disconnect", () => {
 
             console.log(`User '${socket.user.name}' Disconnected.`);
 
-            delete connected_Users[socket.user._id];
+            delete connectedUsers[socket.user._id];
 
         });
     });
