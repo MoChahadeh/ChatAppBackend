@@ -95,6 +95,10 @@ const Conversation = mongoose.model(
       },
       message: {type:String, required: true},
       date: {type: Date, default: Date.now},
+	  read: {
+		type: Boolean,
+		default: false,
+	  }
     }],
 	})
 );
